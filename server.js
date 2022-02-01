@@ -29,6 +29,7 @@ server.put('/collections/lessons/:lesson_id', (req, res) => {
     res.send(`Received PUT request to change space count of lesson ${req.params.lesson_id} to ${req.body}`);
 });
 
-// Start the server listening on port 8080
-server.listen(8080);
-console.log('Node server is running on port 8080');
+// Start the server
+const port = process.env.PORT || 3000
+server.listen(port);
+console.log(`Node server is running on port ${port}`);
