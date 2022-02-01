@@ -34,7 +34,10 @@ server.get('/collections/lessons', (req, res) => {
     })
 });
 server.post('/collections/orders', (req, res) => {
-    res.send('Received order information as a POST request. POST request body: ' + req.body );
+    db.collection('orders').insert(req.body, (e, results) => {
+        if (e) return res.status(500).send();
+        res.send(results)
+    })
 });
 server.put('/collections/lessons/:lesson_id', (req, res) => {
     res.send(`Received PUT request to change space count of lesson ${req.params.lesson_id} to ${req.body}`);
