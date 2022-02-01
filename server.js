@@ -3,6 +3,14 @@ const server = express();
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
 
+// Seeting up MongoDB connection
+const mongo_uri = process.env.MONGO_URI;
+
+let db;
+MongoClient.connect(mongo_uri, (err, client) => {
+    db = client.db('after-school-club')
+})
+
 // Enabling CORS (All requests)
 server.use(cors())
 
