@@ -1,6 +1,7 @@
 const express = require('express');
 const server = express();
 const cors = require('cors');
+const MongoClient = require('mongodb').MongoClient;
 
 // Enabling CORS (All requests)
 server.use(cors())
