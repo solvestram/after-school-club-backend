@@ -28,7 +28,10 @@ server.get('/', (req, res) => {
     res.send('Welcome to After School Club API');
 })
 server.get('/collections/lessons', (req, res) => {
-    res.send('Received GET request to show information of all lessons');
+    db.collection('lessons').find({}).toArray((e, results) => {
+        if (e) return next(e)
+        res.send(results)
+    })
 });
 server.post('/collections/orders', (req, res) => {
     res.send('Received order information as a POST request. POST request body: ' + req.body );
