@@ -5,6 +5,9 @@ const cors = require('cors');
 // Enabling CORS (All requests)
 server.use(cors())
 
+// Body parser for requests
+server.use(express.json());
+
 // Logging
 server.use((req, res, next) => {
     console.log(req.method + " " + req.url);
