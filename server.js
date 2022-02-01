@@ -16,6 +16,9 @@ server.use((req, res, next) => {
 });
 
 // Handlers
+server.get('/', (req, res) => {
+    res.send('Welcome to After School Club API');
+})
 server.get('/collections/lessons', (req, res) => {
     res.send('Received GET request to show information of all lessons');
 });
