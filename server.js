@@ -1,5 +1,9 @@
 const express = require('express');
 const server = express();
+const cors = require('cors');
+
+// Enabling CORS (All requests)
+server.use(cors())
 
 // Logging
 server.use((req, res, next) => {
