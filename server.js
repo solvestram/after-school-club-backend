@@ -29,7 +29,7 @@ server.get('/', (req, res) => {
 })
 server.get('/collections/lessons', (req, res) => {
     db.collection('lessons').find({}).toArray((e, results) => {
-        if (e) return next(e)
+        if (e) return res.status(500).send();
         res.send(results)
     })
 });
@@ -38,6 +38,11 @@ server.post('/collections/orders', (req, res) => {
 });
 server.put('/collections/lessons/:lesson_id', (req, res) => {
     res.send(`Received PUT request to change space count of lesson ${req.params.lesson_id} to ${req.body}`);
+});
+
+// Middleware for returning 404 status
+server.use((req, res) => {
+    return res.status(404).send();
 });
 
 // Start the server
