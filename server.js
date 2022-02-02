@@ -2,6 +2,7 @@ const express = require('express');
 const server = express();
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
+const ObjectId = require('mongodb').ObjectId
 
 // Seeting up MongoDB connection
 const mongo_uri = process.env.MONGO_URI;
@@ -40,7 +41,15 @@ server.post('/collections/orders', (req, res) => {
     })
 });
 server.put('/collections/lessons/:lesson_id', (req, res) => {
-    res.send(`Received PUT request to change space count of lesson ${req.params.lesson_id} to ${req.body}`);
+    db.collection('lessons').updateOne(
+        {_id: new ObjectId(req.params.lesson_id)},
+        {$set: { space: req.body.space }},
+        {safe: true},
+        (e, results) => {
+            if (e) return res.status(500).send();
+            res.send(results)
+        }
+    )
 });
 
 // Middleware for returning 404 status
