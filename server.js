@@ -20,8 +20,9 @@ server.use(cors())
 server.use(express.json());
 
 // Logging
-server.use((req, res) => {
+server.use((req, res, next) => {
     console.log(req.method + " " + req.url);
+    next();
 });
 
 // Serving static files
