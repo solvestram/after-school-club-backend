@@ -89,4 +89,6 @@ function resetDatabase(req, res) {
 
         return res.send("Success");
     }
+
+    return res.status(400).send('Bad Request')
 }
