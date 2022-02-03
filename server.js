@@ -75,20 +75,32 @@ function updateLessonSpace(req, res) {
 function resetDatabase(req, res) {
     // Reset database to default
     if (req.body.reset === true) {
+        console.log('Resetting database to default..')
+
         // delete existing elements in the database
         db.collection('lessons').deleteMany({});
         db.collection('orders').deleteMany({});
+        console.log('Deleted data in the database.')
 
-        // read backup files
+        // read backup files & fixing ObjectId
         lessons_data = JSON.parse(fs.readFileSync('database_backup/lessons.json'));
         orders_data = JSON.parse(fs.readFileSync('database_backup/orders.json'));
+        
+        lessons_data.forEach(lesson => {
+            lesson._id = new ObjectId(lesson._id.$oid);
+        });
+        orders_data.forEach(order => {
+            order._id = new ObjectId(order._id.$oid);
+        });
+        console.log('Read backup data')
 
         // instert backup file data to the database
         db.collection('lessons').insertMany(lessons_data);
         db.collection('orders').insertMany(orders_data);
+        console.log('Uploaded backup data to the database')
 
         return res.send("Success");
     }
 
-    return res.status(400).send('Bad Request')
+    return res.status(400).send('Bad Request');
 }
