@@ -34,6 +34,7 @@ server.get('/', (req, res) => {
 server.get('/collections/lessons', getAllLessons);
 server.post('/collections/orders', postOrder);
 server.put('/collections/lessons/:lesson_id', updateLessonSpace);
+server.post('/collections', resetDatabase);
 
 // Middleware for returning 404 status
 server.use((req, res) => {
@@ -68,4 +69,20 @@ function updateLessonSpace(req, res) {
             res.send(results)
         }
     );
+}
+function resetDatabase(req, res) {
+    // Reset database to default
+    if (req.body.reset == 'true') {
+        // delete existing elements in the database
+        db.collection('lessons').deleteMany({});
+        db.collection('orders').deleteMany({});
+
+        // read backup files
+        lessons_data = JSON.parse(fs.readFileSync('database_backup/lessons.json'));
+        orders_data = JSON.parse(fs.readFileSync('database_backup/orders.json'));
+
+        // instert backup file data to the database
+        db.collection('lessons').insertMany(lessons_data);
+        db.collection('orders').insertMany(orders_data);
+    }
 }
