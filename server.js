@@ -4,6 +4,7 @@ const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
 const fs = require('fs');
+const e = require('express');
 
 // Seeting up MongoDB connection
 const mongo_uri = process.env.MONGO_URI;
@@ -73,7 +74,7 @@ function updateLessonSpace(req, res) {
 }
 function resetDatabase(req, res) {
     // Reset database to default
-    if (req.body.reset == 'true') {
+    if (req.body.reset === true) {
         // delete existing elements in the database
         db.collection('lessons').deleteMany({});
         db.collection('orders').deleteMany({});
