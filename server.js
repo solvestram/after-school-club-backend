@@ -3,6 +3,7 @@ const server = express();
 const cors = require('cors');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectId = require('mongodb').ObjectId
+const fs = require('fs');
 
 // Seeting up MongoDB connection
 const mongo_uri = process.env.MONGO_URI;
@@ -19,9 +20,8 @@ server.use(cors())
 server.use(express.json());
 
 // Logging
-server.use((req, res, next) => {
+server.use((req, res) => {
     console.log(req.method + " " + req.url);
-    next();
 });
 
 // Serving static files
@@ -31,29 +31,9 @@ server.use(express.static('public'));
 server.get('/', (req, res) => {
     res.send('Welcome to After School Club API');
 })
-server.get('/collections/lessons', (req, res) => {
-    db.collection('lessons').find({}).toArray((e, results) => {
-        if (e) return res.status(500).send();
-        res.send(results)
-    })
-});
-server.post('/collections/orders', (req, res) => {
-    db.collection('orders').insert(req.body, (e, results) => {
-        if (e) return res.status(500).send();
-        res.send(results)
-    })
-});
-server.put('/collections/lessons/:lesson_id', (req, res) => {
-    db.collection('lessons').updateOne(
-        {_id: new ObjectId(req.params.lesson_id)},
-        {$set: { space: req.body.space }},
-        {safe: true},
-        (e, results) => {
-            if (e) return res.status(500).send();
-            res.send(results)
-        }
-    )
-});
+server.get('/collections/lessons', getAllLessons);
+server.post('/collections/orders', postOrder);
+server.put('/collections/lessons/:lesson_id', updateLessonSpace);
 
 // Middleware for returning 404 status
 server.use((req, res) => {
@@ -61,6 +41,31 @@ server.use((req, res) => {
 });
 
 // Start the server
-const port = process.env.PORT || 3000
+const port = process.env.PORT || 3000;
 server.listen(port);
 console.log(`Node server is running on port ${port}`);
+
+// Handler methods
+function getAllLessons(req, res) {
+    db.collection('lessons').find({}).toArray((e, results) => {
+        if (e) return res.status(500).send();
+        res.send(results);
+    });
+}
+function postOrder(req, res) {
+    db.collection('orders').insert(req.body, (e, results) => {
+        if (e) return res.status(500).send();
+        res.send(results);
+    });
+}
+function updateLessonSpace(req, res) {
+    db.collection('lessons').updateOne(
+        { _id: new ObjectId(req.params.lesson_id) },
+        { $set: { space: req.body.space } },
+        { safe: true },
+        (e, results) => {
+            if (e) return res.status(500).send();
+            res.send(results)
+        }
+    );
+}
