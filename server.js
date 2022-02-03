@@ -57,7 +57,7 @@ server.put('/collections/lessons/:lesson_id', (req, res) => {
 
 // Middleware for returning 404 status
 server.use((req, res) => {
-    return res.status(404).send();
+    return res.status(404).send("404 Not found");
 });
 
 // Start the server
