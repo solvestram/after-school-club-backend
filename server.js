@@ -50,13 +50,13 @@ console.log(`Node server is running on port ${port}`);
 function getAllLessons(req, res) {
     db.collection('lessons').find({}).toArray((e, results) => {
         if (e) return res.status(500).send();
-        res.send(results);
+        return res.send(results);
     });
 }
 function postOrder(req, res) {
     db.collection('orders').insert(req.body, (e, results) => {
         if (e) return res.status(500).send();
-        res.send(results);
+        return res.send(results);
     });
 }
 function updateLessonSpace(req, res) {
@@ -66,7 +66,7 @@ function updateLessonSpace(req, res) {
         { safe: true },
         (e, results) => {
             if (e) return res.status(500).send();
-            res.send(results)
+            return res.send(results)
         }
     );
 }
@@ -84,5 +84,7 @@ function resetDatabase(req, res) {
         // instert backup file data to the database
         db.collection('lessons').insertMany(lessons_data);
         db.collection('orders').insertMany(orders_data);
+
+        return res.send("Success");
     }
 }
