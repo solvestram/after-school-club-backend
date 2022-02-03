@@ -24,6 +24,9 @@ server.use((req, res, next) => {
     next();
 });
 
+// Serving static files
+server.use("/static", express.static('public'));
+
 // Handlers
 server.get('/', (req, res) => {
     res.send('Welcome to After School Club API');
