@@ -25,7 +25,7 @@ server.use((req, res, next) => {
 });
 
 // Serving static files
-server.use("/static", express.static('public'));
+server.use(express.static('public'));
 
 // Handlers
 server.get('/', (req, res) => {
